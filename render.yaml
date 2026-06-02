@@ -14,14 +14,14 @@ databases:
     databaseName: doveland
     user: doveland
     plan: free          # 1 GB, expires after 30 days. Upgrade to "starter" ($7/mo) for permanent.
-    region: frankfurt    # closest to Nigeria; change to oregon/singapore if you prefer.
+    region: oregon    # closest to Nigeria; change to oregon/singapore if you prefer.
 
 services:
   # ── Redis / Key Value (channel layer + cache + Celery broker) ──
   - type: keyvalue
     name: doveland-redis
     plan: free
-    region: frankfurt
+    region: oregon
     ipAllowList: []     # only allow internal connections (recommended)
     maxmemoryPolicy: allkeys-lru
 
@@ -29,7 +29,7 @@ services:
   - type: web
     name: doveland-backend
     runtime: python
-    region: frankfurt
+    region: oregon
     plan: starter        # $7/mo always-on. Set to "free" for spin-down test.
     rootDir: backend
     buildCommand: ./build.sh
@@ -78,7 +78,7 @@ services:
   - type: worker
     name: doveland-worker
     runtime: python
-    region: frankfurt
+    region: oregon
     plan: starter
     rootDir: backend
     buildCommand: ./build.sh
