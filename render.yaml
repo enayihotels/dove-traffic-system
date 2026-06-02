@@ -116,7 +116,6 @@ services:
   - type: web
     name: doveland-frontend
     runtime: static
-    region: frankfurt
     rootDir: frontend
     buildCommand: npm ci && npm run build
     staticPublishPath: dist
