@@ -33,8 +33,7 @@ services:
     plan: starter        # $7/mo always-on. Set to "free" for spin-down test.
     rootDir: backend
     buildCommand: ./build.sh
-    startCommand: daphne -b 0.0.0.0 -p $PORT config.asgi:application
-    healthCheckPath: /
+    startCommand: python -m daphne -b 0.0.0.0 -p $PORT config.asgi:application    healthCheckPath: /
     autoDeploy: true
     envVars:
       - key: PYTHON_VERSION
@@ -82,8 +81,7 @@ services:
     plan: starter
     rootDir: backend
     buildCommand: ./build.sh
-    startCommand: celery -A config worker --loglevel=info --concurrency=2
-    autoDeploy: true
+    startCommand: python -m celery -A config worker --loglevel=info --concurrency=2    autoDeploy: true
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.9
