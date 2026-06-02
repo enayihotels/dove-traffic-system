@@ -1,0 +1,29 @@
+# venv/
+# env/
+# .venv/
+# node_modules/
+# __pycache__/
+# *.pyc
+# .env
+# .env.*
+# db.sqlite3
+# media/
+# staticfiles/
+# dist/
+# build/
+# .cache/
+# .vscode/
+# backend/.env
+
+# .env
+
+backend/venv/
+frontend/node_modules/
+frontend/dist/
+backend/staticfiles/
+backend/media/
+*.pyc
+__pycache__/
+.env
+.env.*
+db.sqlite3
