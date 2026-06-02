@@ -82,7 +82,8 @@ services:
     plan: starter
     rootDir: backend
     buildCommand: ./build.sh
-    startCommand: python -m celery -A config worker --loglevel=info --concurrency=2    autoDeploy: true
+    startCommand: python -m celery -A config worker --loglevel=info --concurrency=2    
+    autoDeploy: true
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.9
