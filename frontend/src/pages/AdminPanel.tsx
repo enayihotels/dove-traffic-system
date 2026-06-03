@@ -73,7 +73,7 @@ export default function AdminPanel() {
     ),
   });
 
-  const { data: students = [], isLoading: sLoad } = useQuery<Student[]>({
+  const { data: students = [] } = useQuery<Student[]>({
     queryKey: ["admin-students"],
     queryFn: () => api.get("/api/students/").then(r =>
       Array.isArray(r.data) ? r.data : r.data.results ?? []
