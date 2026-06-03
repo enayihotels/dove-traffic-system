@@ -61,3 +61,13 @@ class CollectorListView(generics.ListCreateAPIView):
         if u.is_school_staff:
             return AuthorisedCollector.objects.select_related("user", "student")
         return AuthorisedCollector.objects.filter(user=u).select_related("student")
+
+
+        # Add this class to backend/apps/students/views.py
+
+class CollectorDetailView(generics.RetrieveDestroyAPIView):
+    serializer_class   = AuthorisedCollectorSerializer
+    permission_classes = [IsStaff]
+
+    def get_queryset(self):
+        return AuthorisedCollector.objects.select_related("user", "student")

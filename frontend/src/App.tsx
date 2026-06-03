@@ -1,15 +1,16 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./stores/auth";
-import Layout          from "./layouts/Layout";
-import LoginPage       from "./pages/LoginPage";
-import Dashboard       from "./pages/Dashboard";
-import Sessions        from "./pages/Sessions";
-import Queue           from "./pages/Queue";
-import Students        from "./pages/Students";
-import AIAssistant     from "./pages/AIAssistant";
-import Checkin         from "./pages/Checkin";
-import MyStatus        from "./pages/MyStatus";
-import ChangePassword  from "./pages/ChangePassword";  // ← NEW
+import Layout         from "./layouts/Layout";
+import LoginPage      from "./pages/LoginPage";
+import Dashboard      from "./pages/Dashboard";
+import Sessions       from "./pages/Sessions";
+import Queue          from "./pages/Queue";
+import Students       from "./pages/Students";
+import AIAssistant    from "./pages/AIAssistant";
+import Checkin        from "./pages/Checkin";
+import MyStatus       from "./pages/MyStatus";
+import ChangePassword from "./pages/ChangePassword";
+import AdminPanel     from "./pages/AdminPanel";
 
 const Guard = ({ children }: { children: React.ReactNode }) => {
   const { authed } = useAuth();
@@ -30,7 +31,8 @@ export default function App() {
         <Route path="ai"        element={<AIAssistant />} />
         <Route path="checkin"   element={<Checkin />} />
         <Route path="status"    element={<MyStatus />} />
-        <Route path="password"  element={<ChangePassword />} />  {/* ← NEW */}
+        <Route path="password"  element={<ChangePassword />} />
+        <Route path="admin"     element={<AdminPanel />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
