@@ -1,7 +1,10 @@
 import axios from "axios";
 
-const BASE = import.meta.env.VITE_API_URL ?? "http://localhost:8000/api";
-const api  = axios.create({ baseURL: BASE, timeout: 15_000 });
+// Ensure baseURL always ends with /api
+const RAW_BASE = import.meta.env.VITE_API_URL ?? "http://localhost:8000/api";
+const BASE = RAW_BASE.endsWith("/api") ? RAW_BASE : `${RAW_BASE}/api`;
+
+const api = axios.create({ baseURL: BASE, timeout: 15_000 });
 
 api.interceptors.request.use(cfg => {
   const t = localStorage.getItem("access");
