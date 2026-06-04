@@ -1,8 +1,6 @@
 import axios from "axios";
 
-// Ensure baseURL always ends with /api
-const RAW_BASE = import.meta.env.VITE_API_URL ?? "http://localhost:8000/api";
-const BASE = RAW_BASE.endsWith("/api") ? RAW_BASE : `${RAW_BASE}/api`;
+const BASE = import.meta.env.VITE_API_URL ?? "http://localhost:8000/api";
 
 const api = axios.create({ baseURL: BASE, timeout: 15_000 });
 
