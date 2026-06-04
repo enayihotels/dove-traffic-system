@@ -15,7 +15,7 @@ export default function ChangePassword() {
 
   const mutation = useMutation({
     mutationFn: () =>
-      api.post("/api/accounts/change-password/", {
+      api.post("/accounts/change-password/", {
         current_password: form.current_password,
         new_password:     form.new_password,
       }),
