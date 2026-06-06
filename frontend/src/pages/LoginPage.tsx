@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { GraduationCap, Eye, EyeOff, Loader2, Mail, Lock, Wifi, Shield } from "lucide-react";
 import { useAuth } from "../stores/auth";
 import api from "../api/client";
@@ -14,6 +14,10 @@ export default function LoginPage() {
 
   const { setAuth } = useAuth();
   const navigate    = useNavigate();
+  const location    = useLocation();
+  // If redirected here from a protected page (e.g. QR scan link), go back there after login
+  const from = (location.state as { from?: { pathname: string; search: string } })?.from;
+  const returnTo = from ? `${from.pathname}${from.search || ""}` : "/";
   const canSubmit   = email.trim() !== "" && pass.trim() !== "" && !busy;
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -51,7 +55,7 @@ export default function LoginPage() {
 
       setAuth(user, tokRes.data.access, tokRes.data.refresh);
       toast.success(`Welcome back, ${user.first_name || "User"}!`);
-      navigate("/");
+      navigate(returnTo, { replace: true });
 
     } catch (err: any) {
       setWaking(false);
