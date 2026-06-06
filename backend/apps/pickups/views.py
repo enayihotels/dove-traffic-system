@@ -202,27 +202,45 @@ def verify_qr(request, pk):
         ).get(pk=pk)
     except PickupRequest.DoesNotExist:
         return Response({"error": "Invalid QR code"}, status=404)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
 
     children = []
     for c in req_obj.children.all():
-        children.append({
-            "name":       c.student.full_name,
-            "year_group": c.student.school_class.year_group.display_name,
-            "class_name": c.student.school_class.name,
-            "colour":     c.student.school_class.year_group.colour,
-            "is_ready":   c.is_ready,
-        })
+        try:
+            yg = c.student.school_class.year_group
+            children.append({
+                "name":       c.student.full_name,
+                "year_group": yg.display_name,
+                "class_name": c.student.school_class.name,
+                "colour":     yg.colour_hex,   # correct field name
+                "is_ready":   c.is_ready,
+            })
+        except Exception:
+            children.append({
+                "name":       c.student.full_name,
+                "year_group": "",
+                "class_name": "",
+                "colour":     "#3B82F6",
+                "is_ready":   c.is_ready,
+            })
+
+    collector_phone = ""
+    try:
+        collector_phone = req_obj.collector.phone or ""
+    except Exception:
+        pass
 
     return Response({
-        "id":             str(req_obj.id),
-        "queue_token":    req_obj.queue_token,
-        "status":         req_obj.status,
-        "collector_name": req_obj.collector.full_name,
-        "collector_phone": getattr(req_obj.collector, "phone", ""),
-        "session_type":   req_obj.session.get_session_type_display(),
-        "session_date":   str(req_obj.session.date),
-        "children":       children,
-        "checked_in_at":  str(req_obj.checked_in_at) if req_obj.checked_in_at else None,
-        "ai_flagged":     req_obj.ai_flagged,
-        "ai_risk_level":  req_obj.ai_risk_level,
+        "id":              str(req_obj.id),
+        "queue_token":     req_obj.queue_token,
+        "status":          req_obj.status,
+        "collector_name":  req_obj.collector.full_name,
+        "collector_phone": collector_phone,
+        "session_type":    req_obj.session.get_session_type_display(),
+        "session_date":    str(req_obj.session.date),
+        "children":        children,
+        "checked_in_at":   str(req_obj.checked_in_at) if req_obj.checked_in_at else None,
+        "ai_flagged":      req_obj.ai_flagged,
+        "ai_risk_level":   req_obj.ai_risk_level,
     })
