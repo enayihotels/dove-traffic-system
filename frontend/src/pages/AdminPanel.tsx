@@ -68,28 +68,28 @@ export default function AdminPanel() {
   // ── Queries ──────────────────────────────────────────────
   const { data: parents = [], isLoading: pLoad } = useQuery<ParentUser[]>({
     queryKey: ["admin-parents"],
-    queryFn: () => api.get("/api/accounts/users/?role=parent").then(r =>
+    queryFn: () => api.get("/accounts/users/?role=parent").then(r =>
       Array.isArray(r.data) ? r.data : r.data.results ?? []
     ),
   });
 
   const { data: students = [] } = useQuery<Student[]>({
     queryKey: ["admin-students"],
-    queryFn: () => api.get("/api/students/").then(r =>
+    queryFn: () => api.get("/students/").then(r =>
       Array.isArray(r.data) ? r.data : r.data.results ?? []
     ),
   });
 
   const { data: collectors = [], isLoading: cLoad } = useQuery<Collector[]>({
     queryKey: ["admin-collectors"],
-    queryFn: () => api.get("/api/students/collectors/").then(r =>
+    queryFn: () => api.get("/students/collectors/").then(r =>
       Array.isArray(r.data) ? r.data : r.data.results ?? []
     ),
   });
 
   // ── Mutations ────────────────────────────────────────────
   const createParent = useMutation({
-    mutationFn: () => api.post("/api/accounts/create-parent/", pForm),
+    mutationFn: () => api.post("/accounts/create-parent/", pForm),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["admin-parents"] });
       setPForm({ first_name: "", last_name: "", email: "", phone: "", temp_password: "" });
@@ -99,7 +99,7 @@ export default function AdminPanel() {
   });
 
   const linkChild = useMutation({
-    mutationFn: () => api.post("/api/students/collectors/", lForm),
+    mutationFn: () => api.post("/students/collectors/", lForm),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["admin-collectors"] });
       setLForm({ user: "", student: "", relationship: "mother", can_collect_alone: true, id_verified: false });
@@ -109,7 +109,7 @@ export default function AdminPanel() {
   });
 
   const removeLink = useMutation({
-    mutationFn: (id: string) => api.delete(`/api/students/collectors/${id}/`),
+    mutationFn: (id: string) => api.delete(`/students/collectors/${id}/`),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["admin-collectors"] });
       toast.success("Link removed.");
