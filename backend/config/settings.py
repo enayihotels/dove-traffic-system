@@ -153,7 +153,7 @@ REST_FRAMEWORK = {
 
 # ── JWT ───────────────────────────────────────────────────
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME":  timedelta(minutes=int(os.getenv("JWT_ACCESS_MINUTES", "60"))),
+    "ACCESS_TOKEN_LIFETIME":  timedelta(minutes=int(os.getenv("JWT_ACCESS_MINUTES", "480"))),  # 8 hours
     "REFRESH_TOKEN_LIFETIME": timedelta(days=int(os.getenv("JWT_REFRESH_DAYS", "7"))),
     "ROTATE_REFRESH_TOKENS":  True,
     "AUTH_HEADER_TYPES":      ("Bearer",),
