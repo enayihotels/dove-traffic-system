@@ -24,16 +24,7 @@ export default function MyStatus() {
       api.get("/pickups/requests/").then(r =>
         Array.isArray(r.data) ? r.data : (r.data.results ?? [])
       ),
-    // Poll fast when active, slow when idle
-    refetchInterval: (data) => {
-      const active = (data as PickupRequest[] | undefined)?.find(
-        r => !["cancelled", "no_show"].includes(r.status)
-      );
-      if (!active) return 60_000;               // no active request — slow poll
-      if (active.status === "called") return 3_000;   // child walking out — poll every 3s
-      if (active.status === "collected") return 30_000; // done — slow down
-      return 10_000;                             // waiting — poll every 10s
-    },
+    refetchInterval: 5_000,  // poll every 5s for quick status updates
     retry: 1,
     retryDelay: 3000,
   });
