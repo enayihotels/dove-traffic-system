@@ -48,7 +48,7 @@ export function useWS(url: string, onMsg: (d: unknown) => void, enabled = true) 
       try { onMsg(JSON.parse(e.data)); } catch {}
     };
 
-    sock.onclose = (e) => {
+    sock.onclose = (_e) => {
       retries.current += 1;
       // Back off: 3s, 6s, 10s, then every 15s
       const delay = retries.current <= 1 ? 3_000
