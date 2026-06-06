@@ -12,9 +12,34 @@ const api = axios.create({
   timeout: 35_000,   // 35s — enough time for Render free tier to wake from sleep
 });
 
-api.interceptors.request.use(cfg => {
-  const t = localStorage.getItem("access");
-  if (t) cfg.headers.Authorization = `Bearer ${t}`;
+// Decode JWT exp claim without a library
+function jwtExpiry(token: string): number {
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return payload.exp * 1000; // convert to ms
+  } catch { return 0; }
+}
+
+api.interceptors.request.use(async cfg => {
+  let token = localStorage.getItem("access");
+
+  // Proactively refresh if token expires within 5 minutes
+  if (token) {
+    const expiry = jwtExpiry(token);
+    const inFiveMin = Date.now() + 5 * 60 * 1000;
+    if (expiry > 0 && expiry < inFiveMin) {
+      const refresh = localStorage.getItem("refresh");
+      if (refresh) {
+        try {
+          const { data } = await axios.post(`${BASE}/auth/refresh/`, { refresh });
+          token = data.access;
+          localStorage.setItem("access", token as string);
+        } catch { /* let the request proceed and 401 handler will catch it */ }
+      }
+    }
+  }
+
+  if (token) cfg.headers.Authorization = `Bearer ${token}`;
   return cfg;
 });
 
