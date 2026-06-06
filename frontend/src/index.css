@@ -57,6 +57,10 @@
   .badge-no_show    { @apply bg-rose/15   text-rose-light   border border-rose/20;   }
 
   /* ── Live dot ───────────────────────────────────────── */
+
+  /* ── Mobile safe-area ───────────────────────────────────── */
+  .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
+
   .live-dot {
     @apply inline-block w-2 h-2 rounded-full bg-jade;
     box-shadow: 0 0 0 0 rgba(16,185,129,0.7);
