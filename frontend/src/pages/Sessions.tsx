@@ -36,7 +36,7 @@ export default function Sessions() {
   };
 
   const create   = useMutation({ mutationFn: () => api.post("/pickups/sessions/", form),                         onSuccess: () => { inv(); setOpen(false); toast.success("Session created"); } });
-  const activate = useMutation({ mutationFn: (id: string) => api.post(`/pickups/sessions/${id}/open/`),          onSuccess: () => { inv(); toast.success("Session opened — parents can now check in"); } });
+  const activate = useMutation({ mutationFn: (id: string) => api.post(`/pickups/sessions/${id}/open/`),          onSuccess: () => { inv(); toast.success("Session opened  -  parents can now check in"); } });
   const start    = useMutation({ mutationFn: (id: string) => api.post(`/pickups/sessions/${id}/activate/`),      onSuccess: () => { inv(); toast.success("Dismissal started"); } });
   const close    = useMutation({ mutationFn: (id: string) => api.post(`/pickups/sessions/${id}/close/`),         onSuccess: () => { inv(); toast.success("Session closed"); } });
 
@@ -72,13 +72,13 @@ export default function Sessions() {
         </button>
       </div>
 
-      {/* Info banner — explains the workflow to staff */}
+      {/* Info banner  -  explains the workflow to staff */}
       <div className="flex items-start gap-3 bg-blue-500/10 border border-blue-500/25 rounded-2xl px-4 py-3">
         <Info size={16} className="text-blue-400 shrink-0 mt-0.5" />
         <p className="text-blue-300 text-sm">
-          <span className="font-semibold">Workflow:</span> Create a session →
-          click <span className="font-semibold">Open</span> to let parents check in →
-          click <span className="font-semibold">Start</span> when dismissal begins →
+          <span className="font-semibold">Workflow:</span> Create a session ->
+          click <span className="font-semibold">Open</span> to let parents check in ->
+          click <span className="font-semibold">Start</span> when dismissal begins ->
           click <span className="font-semibold">Close</span> when done.
           Parents can only see sessions that are <span className="font-semibold">Open</span> or <span className="font-semibold">Active</span>.
         </p>
@@ -175,7 +175,7 @@ export default function Sessions() {
       ) : sessions.length === 0 ? (
         <div className="card text-center py-12">
           <Calendar size={34} className="text-white/20 mx-auto mb-3" />
-          <p className="muted">No sessions yet — create one above</p>
+          <p className="muted">No sessions yet  -  create one above</p>
         </div>
       ) : (
         <div className="space-y-2">
@@ -193,10 +193,10 @@ export default function Sessions() {
                   {s.session_type.replace(/_/g, " ").toUpperCase()}
                 </p>
                 <p className="text-white/40 text-xs mt-0.5">
-                  {s.date} · {s.scheduled_start}–{s.scheduled_end}
+                  {s.date}  .  {s.scheduled_start}-{s.scheduled_end}
                   {s.status === "scheduled" && (
                     <span className="ml-2 text-amber-400">
-                      — Click "Open" so parents can check in
+                       -  Click "Open" so parents can check in
                     </span>
                   )}
                 </p>
