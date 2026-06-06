@@ -76,9 +76,9 @@ export default function Sessions() {
       <div className="flex items-start gap-3 bg-blue-500/10 border border-blue-500/25 rounded-2xl px-4 py-3">
         <Info size={16} className="text-blue-400 shrink-0 mt-0.5" />
         <p className="text-blue-300 text-sm">
-          <span className="font-semibold">Workflow:</span> Create a session ->
-          click <span className="font-semibold">Open</span> to let parents check in ->
-          click <span className="font-semibold">Start</span> when dismissal begins ->
+          <span className="font-semibold">Workflow:</span> Create a session, then
+          click <span className="font-semibold">Open</span> to let parents check in,
+          click <span className="font-semibold">Start</span> when dismissal begins,
           click <span className="font-semibold">Close</span> when done.
           Parents can only see sessions that are <span className="font-semibold">Open</span> or <span className="font-semibold">Active</span>.
         </p>
