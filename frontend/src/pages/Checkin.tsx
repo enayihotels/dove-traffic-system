@@ -20,7 +20,9 @@ export default function Checkin() {
   const { data: sessions=[] } = useQuery<PickupSession[]>({
     queryKey:["open-sessions"],
     queryFn: () => api.get("/pickups/sessions/").then(r=>Array.isArray(r.data)?r.data:(r.data.results??[])),
-    refetchInterval:30_000,
+    refetchInterval: 60_000,
+    retry: 1,
+    retryDelay: 3000,
   });
   const active = sessions.find(s=>["open","active"].includes(s.status));
 
