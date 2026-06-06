@@ -18,9 +18,7 @@ const NAV: Record<string, { to: string; icon: React.ElementType; label: string }
     { to: "/students",  icon: GraduationCap,   label: "Students"        },
     { to: "/verify",    icon: ScanLine,        label: "QR Verify"       },
     { to: "/ai",        icon: Bot,             label: "AI Assistant"    },
-    { to: "/verify",    icon: ScanLine,        label: "QR Verify"       },
     { to: "/admin",     icon: ShieldCheck,     label: "Admin Panel"     },
-    { to: "/verify",    icon: ScanLine,        label: "QR Verify"       },
     { to: "/password",  icon: KeyRound,        label: "Change Password" },
   ],
   teacher: [
@@ -39,6 +37,7 @@ const NAV: Record<string, { to: string; icon: React.ElementType; label: string }
   security: [
     { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard"       },
     { to: "/students",  icon: Shield,          label: "Safeguarding"    },
+    { to: "/verify",    icon: ScanLine,        label: "QR Verify"       },
     { to: "/password",  icon: KeyRound,        label: "Change Password" },
   ],
   parent: [
