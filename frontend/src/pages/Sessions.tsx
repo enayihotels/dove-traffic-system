@@ -22,7 +22,7 @@ export default function Sessions() {
   const { data: sessions = [], isLoading } = useQuery<PickupSession[]>({
     queryKey: ["all-sessions"],
     queryFn: () =>
-      api.get("/api/pickups/sessions/?status=all").then((r) =>
+      api.get("/pickups/sessions/?status=all").then((r) =>
         Array.isArray(r.data) ? r.data : r.data.results ?? []
       ),
     refetchInterval: 20_000,
@@ -33,10 +33,10 @@ export default function Sessions() {
     qc.invalidateQueries({ queryKey: ["sessions"] });
   };
 
-  const create   = useMutation({ mutationFn: () => api.post("/api/pickups/sessions/", form),                         onSuccess: () => { inv(); setOpen(false); toast.success("Session created"); } });
-  const activate = useMutation({ mutationFn: (id: string) => api.post(`/api/pickups/sessions/${id}/open/`),          onSuccess: () => { inv(); toast.success("Session opened — parents can now check in"); } });
-  const start    = useMutation({ mutationFn: (id: string) => api.post(`/api/pickups/sessions/${id}/activate/`),      onSuccess: () => { inv(); toast.success("Dismissal started"); } });
-  const close    = useMutation({ mutationFn: (id: string) => api.post(`/api/pickups/sessions/${id}/close/`),         onSuccess: () => { inv(); toast.success("Session closed"); } });
+  const create   = useMutation({ mutationFn: () => api.post("/pickups/sessions/", form),                         onSuccess: () => { inv(); setOpen(false); toast.success("Session created"); } });
+  const activate = useMutation({ mutationFn: (id: string) => api.post(`/pickups/sessions/${id}/open/`),          onSuccess: () => { inv(); toast.success("Session opened — parents can now check in"); } });
+  const start    = useMutation({ mutationFn: (id: string) => api.post(`/pickups/sessions/${id}/activate/`),      onSuccess: () => { inv(); toast.success("Dismissal started"); } });
+  const close    = useMutation({ mutationFn: (id: string) => api.post(`/pickups/sessions/${id}/close/`),         onSuccess: () => { inv(); toast.success("Session closed"); } });
 
   const statusBadge = (s: string) => {
     const map: Record<string, string> = {
