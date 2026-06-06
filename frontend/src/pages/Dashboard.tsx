@@ -69,7 +69,7 @@ export default function Dashboard() {
 
   const inv = () => qc.invalidateQueries({ queryKey: ["sessions"] });
 
-  const openSession     = useMutation({ mutationFn: (id: string) => api.post(`/pickups/sessions/${id}/open/`),     onSuccess: () => { inv(); toast.success("Session opened — parents can now check in!"); } });
+  const openSession     = useMutation({ mutationFn: (id: string) => api.post(`/pickups/sessions/${id}/open/`),     onSuccess: () => { inv(); toast.success("Session opened  -  parents can now check in!"); } });
   const activateSession = useMutation({ mutationFn: (id: string) => api.post(`/pickups/sessions/${id}/activate/`), onSuccess: () => { inv(); toast.success("Dismissal started!"); } });
   const closeSession    = useMutation({ mutationFn: (id: string) => api.post(`/pickups/sessions/${id}/close/`),    onSuccess: () => { inv(); toast.success("Session closed."); } });
 
@@ -107,14 +107,14 @@ export default function Dashboard() {
       {isStaff && (scheduled.length > 0 || openSess.length > 0) && (
         <motion.div variants={S.i} className="rounded-2xl border border-amber-500/30 bg-amber-500/8 p-4 space-y-2">
           <p className="text-amber-300 font-semibold text-sm flex items-center gap-2">
-            <Clock size={15} /> Action Required — Sessions waiting for you
+            <Clock size={15} /> Action Required  -  Sessions waiting for you
           </p>
           {scheduled.map((s) => (
             <div key={s.id} className="flex items-center justify-between bg-black/20 rounded-xl px-4 py-3 gap-3 flex-wrap">
               <div>
                 <p className="text-white font-medium text-sm">{s.session_type.replace(/_/g, " ").toUpperCase()}</p>
-                <p className="text-white/40 text-xs mt-0.5">{s.date} · {s.scheduled_start}–{s.scheduled_end}</p>
-                <p className="text-amber-400 text-xs mt-1">⚠ Not visible to parents yet — click Open to allow check-ins</p>
+                <p className="text-white/40 text-xs mt-0.5">{s.date}  .  {s.scheduled_start}-{s.scheduled_end}</p>
+                <p className="text-amber-400 text-xs mt-1">! Not visible to parents yet  -  click Open to allow check-ins</p>
               </div>
               <button onClick={() => openSession.mutate(s.id)} disabled={openSession.isPending}
                 className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-black font-semibold text-sm px-4 py-2 rounded-xl transition-colors shrink-0">
@@ -127,8 +127,8 @@ export default function Dashboard() {
             <div key={s.id} className="flex items-center justify-between bg-black/20 rounded-xl px-4 py-3 gap-3 flex-wrap">
               <div>
                 <p className="text-white font-medium text-sm">{s.session_type.replace(/_/g, " ").toUpperCase()}</p>
-                <p className="text-white/40 text-xs mt-0.5">{s.date} · {s.scheduled_start}–{s.scheduled_end}</p>
-                <p className="text-emerald-400 text-xs mt-1">✓ Parents can check in — click Start Dismissal when school gates open</p>
+                <p className="text-white/40 text-xs mt-0.5">{s.date}  .  {s.scheduled_start}-{s.scheduled_end}</p>
+                <p className="text-emerald-400 text-xs mt-1"> Parents can check in  -  click Start Dismissal when school gates open</p>
               </div>
               <button onClick={() => activateSession.mutate(s.id)} disabled={activateSession.isPending}
                 className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm px-4 py-2 rounded-xl transition-colors shrink-0">
@@ -153,7 +153,7 @@ export default function Dashboard() {
               <span className="text-jade font-medium text-sm">Dismissal In Progress</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="muted text-sm">{s.scheduled_start}–{s.scheduled_end}</span>
+              <span className="muted text-sm">{s.scheduled_start}-{s.scheduled_end}</span>
               {isStaff && (
                 <button onClick={(e) => { e.stopPropagation(); closeSession.mutate(s.id); }}
                   disabled={closeSession.isPending}
@@ -239,17 +239,17 @@ export default function Dashboard() {
                   s.status === "closed"    ? "bg-white/20" : "bg-rose-400"
                 }`} />
 
-                {/* Session info — clickable */}
+                {/* Session info  -  clickable */}
                 <div className="flex-1 min-w-0 cursor-pointer" onClick={() => navigate(`/queue/${s.id}`)}>
                   <p className="text-white font-medium text-sm">
                     {s.session_type.replace(/_/g, " ").toUpperCase()}
                   </p>
                   <p className="text-white/40 text-xs mt-0.5">
-                    {s.scheduled_start}–{s.scheduled_end}
+                    {s.scheduled_start}-{s.scheduled_end}
                   </p>
                 </div>
 
-                {/* Status badge — always visible */}
+                {/* Status badge  -  always visible */}
                 <StatusBadge status={s.status} />
 
                 {/* Action buttons */}
