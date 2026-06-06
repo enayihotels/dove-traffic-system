@@ -58,7 +58,9 @@ export default function Layout() {
       api.get("/alerts/").then((r) =>
         Array.isArray(r.data) ? r.data : r.data.results ?? []
       ),
-    refetchInterval: 30_000,
+    refetchInterval: 90_000,
+    retry: 1,
+    retryDelay: 3000,
   });
   const unread = notifs.filter((n) => !n.is_read).length;
   const currentLabel = items.find(i => location.pathname.startsWith(i.to))?.label ?? "Doveland";
