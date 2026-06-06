@@ -134,6 +134,8 @@ services:
         value: "8.97227713255338"
       - key: VITE_SCHOOL_LNG
         value: "7.47895342331406"
+      - key: NODE_VERSION
+        value: "20"
       - key: VITE_GEOFENCE
         value: "300"
     headers:
