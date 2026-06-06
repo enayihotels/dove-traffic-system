@@ -1,3 +1,4 @@
+// build-trigger: 2026-06-06T07:30:00Z
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
