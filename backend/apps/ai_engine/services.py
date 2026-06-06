@@ -73,7 +73,7 @@ def chat(messages: list, session_id: Optional[str] = None) -> str:
     system = f"{SYSTEM_PROMPT}\n\n--- LIVE QUEUE DATA ---\n{_live_context(session_id)}"
     try:
         resp = c.messages.create(
-            model="claude-opus-4-5",
+            model="claude-haiku-4-5-20251001",
             max_tokens=1024,
             system=system,
             messages=messages,
@@ -111,7 +111,7 @@ def predict_peak(session) -> dict:
     )
     try:
         resp = c.messages.create(
-            model="claude-opus-4-5",
+            model="claude-haiku-4-5-20251001",
             max_tokens=256,
             messages=[{"role": "user", "content": prompt}],
         )
@@ -148,7 +148,7 @@ def risk_check(pickup_request) -> dict:
     )
     try:
         resp = c.messages.create(
-            model="claude-opus-4-5",
+            model="claude-haiku-4-5-20251001",
             max_tokens=200,
             messages=[{"role": "user", "content": prompt}],
         )
@@ -184,7 +184,7 @@ def session_report(session) -> str:
     )
     try:
         resp = c.messages.create(
-            model="claude-opus-4-5",
+            model="claude-haiku-4-5-20251001",
             max_tokens=350,
             messages=[{"role": "user", "content": prompt}],
         )
