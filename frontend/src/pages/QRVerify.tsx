@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { QrCode, CheckCircle, AlertTriangle, Loader2, User, X, ShieldCheck } from "lucide-react";
 import api from "../api/client";
-import toast from "react-hot-toast";
 
 interface VerifyResult {
   id:             string;
