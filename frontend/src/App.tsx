@@ -34,6 +34,8 @@ export default function App() {
         <Route path="status"    element={<MyStatus />} />
         <Route path="password"  element={<ChangePassword />} />
         <Route path="admin"     element={<AdminPanel />} />
+        <Route path="verify"    element={<QRVerify />} />
+        <Route path="verify/:id" element={<QRVerify />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
