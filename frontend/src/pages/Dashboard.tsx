@@ -39,7 +39,7 @@ export default function Dashboard() {
   const { data: sessions = [], isLoading } = useQuery<PickupSession[]>({
     queryKey: ["sessions"],
     queryFn: () =>
-      api.get("/api/pickups/sessions/").then((r) =>
+      api.get("/pickups/sessions/").then((r) =>
         Array.isArray(r.data) ? r.data : r.data.results ?? []
       ),
     refetchInterval: 15_000,
@@ -47,9 +47,9 @@ export default function Dashboard() {
 
   const inv = () => qc.invalidateQueries({ queryKey: ["sessions"] });
 
-  const openSession     = useMutation({ mutationFn: (id: string) => api.post(`/api/pickups/sessions/${id}/open/`),     onSuccess: () => { inv(); toast.success("Session opened — parents can now check in!"); } });
-  const activateSession = useMutation({ mutationFn: (id: string) => api.post(`/api/pickups/sessions/${id}/activate/`), onSuccess: () => { inv(); toast.success("Dismissal started!"); } });
-  const closeSession    = useMutation({ mutationFn: (id: string) => api.post(`/api/pickups/sessions/${id}/close/`),    onSuccess: () => { inv(); toast.success("Session closed."); } });
+  const openSession     = useMutation({ mutationFn: (id: string) => api.post(`/pickups/sessions/${id}/open/`),     onSuccess: () => { inv(); toast.success("Session opened — parents can now check in!"); } });
+  const activateSession = useMutation({ mutationFn: (id: string) => api.post(`/pickups/sessions/${id}/activate/`), onSuccess: () => { inv(); toast.success("Dismissal started!"); } });
+  const closeSession    = useMutation({ mutationFn: (id: string) => api.post(`/pickups/sessions/${id}/close/`),    onSuccess: () => { inv(); toast.success("Session closed."); } });
 
   const active    = sessions.filter((s) => s.status === "active");
   const scheduled = sessions.filter((s) => s.status === "scheduled");
