@@ -125,9 +125,25 @@ class RequestListView(generics.ListCreateAPIView):
 @api_view(["POST"])
 @permission_classes([IsStaff])
 def call_children(request, pk):
-    """Mark children as called — walking out now."""
+    """Mark children as called — walking out now.
+    Works from ANY pre-collected status (pending, en_route, arrived, in_queue).
+    This means staff can call a parent who is still 'pending' during testing
+    or when geofencing is not active.
+    """
     with transaction.atomic():
         req = PickupRequest.objects.get(pk=pk)
+        # Accept call from any active status
+        allowed = [
+            PickupRequest.STATUS_PENDING,
+            "en_route",
+            PickupRequest.STATUS_ARRIVED,
+            PickupRequest.STATUS_IN_QUEUE,
+        ]
+        if req.status not in allowed:
+            return Response(
+                {"error": f"Cannot call from status '{req.status}'"},
+                status=400,
+            )
         req.status   = PickupRequest.STATUS_CALLED
         req.called_at = timezone.now()
         req.save(update_fields=["status", "called_at"])
