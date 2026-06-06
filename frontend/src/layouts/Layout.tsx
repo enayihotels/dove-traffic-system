@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../stores/auth";
 import {
   LayoutDashboard, CalendarDays, GraduationCap, Bot,
-  Car, QrCode, LogOut, Bell, Shield, ChevronLeft, ChevronRight,
+  Car, QrCode, ScanLine, LogOut, Bell, Shield, ChevronLeft, ChevronRight,
   KeyRound, ShieldCheck, Menu, X,
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
