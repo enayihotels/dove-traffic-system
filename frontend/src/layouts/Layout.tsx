@@ -233,7 +233,7 @@ export default function Layout() {
           <Outlet />
         </main>
 
-        {/* Bottom tab bar — parents on mobile only */}
+        {/* Bottom tab bar  -  parents on mobile only */}
         {isParent && (
           <nav className="md:hidden shrink-0 bg-night-100/95 backdrop-blur-xl border-t border-white/10 flex"
                style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}>
