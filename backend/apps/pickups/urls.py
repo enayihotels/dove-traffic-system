@@ -11,4 +11,5 @@ urlpatterns = [
     path("requests/<uuid:pk>/call/",     views.call_children),
     path("requests/<uuid:pk>/complete/", views.complete_pickup),
     path("events/",                      views.EventListView.as_view()),
+    path("requests/<uuid:pk>/verify/",   views.verify_qr),
 ]
