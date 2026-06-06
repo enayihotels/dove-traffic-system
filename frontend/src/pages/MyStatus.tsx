@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { motion } from "framer-motion";
-import { CheckCircle, Car, Loader2, Zap } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { CheckCircle, Car, Loader2, Zap, PartyPopper } from "lucide-react";
 import { QRCode } from "react-qr-code";
 import api from "../api/client";
 import type { PickupRequest } from "../types";
@@ -17,20 +17,31 @@ const STEPS = [
 
 export default function MyStatus() {
   const { loc } = useLocation(true);
+
   const { data: requests = [], isLoading } = useQuery<PickupRequest[]>({
     queryKey: ["my-requests"],
     queryFn: () =>
       api.get("/pickups/requests/").then(r =>
         Array.isArray(r.data) ? r.data : (r.data.results ?? [])
       ),
-    refetchInterval: 30_000,
+    // Poll fast when active, slow when idle
+    refetchInterval: (data) => {
+      const active = (data as PickupRequest[] | undefined)?.find(
+        r => !["cancelled", "no_show"].includes(r.status)
+      );
+      if (!active) return 60_000;               // no active request — slow poll
+      if (active.status === "called") return 3_000;   // child walking out — poll every 3s
+      if (active.status === "collected") return 30_000; // done — slow down
+      return 10_000;                             // waiting — poll every 10s
+    },
     retry: 1,
     retryDelay: 3000,
   });
 
-  const req  = requests.find(r => !["collected","cancelled","no_show"].includes(r.status));
-  const step = req ? STEPS.findIndex(s => s.key === req.status) : -1;
-  const called = req?.status === "called";
+  const req     = requests.find(r => !["cancelled", "no_show"].includes(r.status));
+  const step    = req ? STEPS.findIndex(s => s.key === req.status) : -1;
+  const called    = req?.status === "called";
+  const collected = req?.status === "collected";
 
   if (isLoading) return (
     <div className="flex justify-center py-24">
@@ -38,26 +49,69 @@ export default function MyStatus() {
     </div>
   );
 
+  // ── Collected screen ────────────────────────────────────────────────────────
+  if (collected) return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className="max-w-md mx-auto text-center py-16 space-y-6 px-4">
+      <motion.div
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ type: "spring", stiffness: 220, delay: 0.1 }}
+        className="w-24 h-24 bg-jade/12 border border-jade/32 rounded-full flex items-center justify-center mx-auto shadow-glow-jade">
+        <PartyPopper size={40} className="text-jade"/>
+      </motion.div>
+      <h2 className="font-display font-bold text-3xl text-white">Pickup Complete!</h2>
+      <p className="muted text-base">
+        Your child has been safely collected. Have a great evening!
+      </p>
+      {req && (
+        <div className="card border-jade/30 bg-jade/5 py-4">
+          {req.children.map(c => (
+            <div key={c.id} className="flex items-center justify-center gap-2">
+              <CheckCircle size={16} className="text-jade"/>
+              <span className="text-white font-medium">{c.student.full_name}</span>
+              <span className="muted text-sm">{c.student.year_group_name}</span>
+            </div>
+          ))}
+        </div>
+      )}
+      <p className="muted text-sm">
+        This record has been saved to the school's safeguarding log.
+      </p>
+    </motion.div>
+  );
+
+  // ── No active request ───────────────────────────────────────────────────────
   if (!req) return (
     <div className="max-w-md mx-auto text-center py-20 space-y-4">
       <div className="w-16 h-16 bg-night-100/50 border border-white/10 rounded-2xl flex items-center justify-center mx-auto">
         <Car size={26} className="text-slate/38"/>
       </div>
       <h2 className="font-display font-bold text-xl text-white">No Active Pickup</h2>
-      <p className="muted text-sm">Head to Check In when a session is open and you are on the way.</p>
+      <p className="muted text-sm">
+        Head to Check In when a session is open and you are on the way.
+      </p>
     </div>
   );
 
+  // ── Active request ──────────────────────────────────────────────────────────
   return (
     <div className="max-w-lg mx-auto space-y-5">
 
       {/* Token card */}
-      <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-        className={`card text-center py-8 relative overflow-hidden ${called ? "border-orange-500/42 bg-orange-500/6" : "border-jade/28"}`}>
-        <div className="absolute inset-x-0 top-0 h-px"
-          style={{ background: called
+      <motion.div
+        initial={{ scale: 0.95, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        className={`card text-center py-8 relative overflow-hidden ${
+          called ? "border-orange-500/42 bg-orange-500/6" : "border-jade/28"
+        }`}>
+        <div className="absolute inset-x-0 top-0 h-px" style={{
+          background: called
             ? "linear-gradient(90deg,transparent,rgba(249,115,22,0.8),transparent)"
-            : "linear-gradient(90deg,transparent,rgba(16,185,129,0.7),transparent)" }}/>
+            : "linear-gradient(90deg,transparent,rgba(16,185,129,0.7),transparent)"
+        }}/>
 
         {called && (
           <motion.div
@@ -73,7 +127,9 @@ export default function MyStatus() {
         )}
 
         <p className="muted text-sm mb-2">Queue Token</p>
-        <p className={`font-mono font-bold text-5xl tracking-widest mb-1 ${called ? "text-orange-400" : "text-jade"}`}>
+        <p className={`font-mono font-bold text-5xl tracking-widest mb-1 ${
+          called ? "text-orange-400" : "text-jade"
+        }`}>
           {req.queue_token}
         </p>
         {req.queue_position != null && (
@@ -85,38 +141,48 @@ export default function MyStatus() {
       <div className="card">
         <p className="label mb-4">Pickup Progress</p>
         <div className="space-y-3">
-          {STEPS.map((s, i) => {
-            const done = i < step;
-            const curr = i === step;
-            return (
-              <div key={s.key} className="flex items-center gap-3">
-                <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
-                  done ? "bg-jade/22 border border-jade/45" :
-                  curr ? "bg-jade/18 border-2 border-jade" :
-                  "bg-white/5 border border-white/10"
-                }`}>
-                  {done
-                    ? <CheckCircle size={12} className="text-jade"/>
-                    : curr
-                    ? <motion.div className="w-2 h-2 bg-jade rounded-full"
-                        animate={{ scale: [1, 1.4, 1] }}
-                        transition={{ duration: 1.5, repeat: Infinity }}/>
-                    : <div className="w-2 h-2 bg-white/10 rounded-full"/>
-                  }
-                </div>
-                <span className={`text-sm transition-colors flex-1 ${
-                  done ? "text-jade" : curr ? "text-white font-medium" : "text-slate/38"
-                }`}>
-                  {s.label}
-                </span>
-                {curr && (
-                  <span className="text-jade text-xs font-medium px-2 py-0.5 bg-jade/10 rounded-full border border-jade/20">
-                    Now
+          <AnimatePresence>
+            {STEPS.map((s, i) => {
+              const done = i < step;
+              const curr = i === step;
+              return (
+                <motion.div
+                  key={s.key}
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  className="flex items-center gap-3">
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
+                    done ? "bg-jade/22 border border-jade/45" :
+                    curr ? "bg-jade/18 border-2 border-jade" :
+                    "bg-white/5 border border-white/10"
+                  }`}>
+                    {done
+                      ? <CheckCircle size={12} className="text-jade"/>
+                      : curr
+                      ? <motion.div
+                          className="w-2 h-2 bg-jade rounded-full"
+                          animate={{ scale: [1, 1.4, 1] }}
+                          transition={{ duration: 1.5, repeat: Infinity }}/>
+                      : <div className="w-2 h-2 bg-white/10 rounded-full"/>
+                    }
+                  </div>
+                  <span className={`text-sm transition-colors flex-1 ${
+                    done ? "text-jade" :
+                    curr ? "text-white font-medium" :
+                    "text-slate/38"
+                  }`}>
+                    {s.label}
                   </span>
-                )}
-              </div>
-            );
-          })}
+                  {curr && (
+                    <span className="text-jade text-xs font-medium px-2 py-0.5 bg-jade/10 rounded-full border border-jade/20">
+                      Now
+                    </span>
+                  )}
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
         </div>
       </div>
 
@@ -127,7 +193,8 @@ export default function MyStatus() {
           {req.children.map(c => (
             <div key={c.id}
               className="flex items-center gap-3 bg-white/4 border border-white/8 rounded-xl px-3 py-2.5">
-              <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 text-xs font-bold"
+              <div
+                className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 text-xs font-bold"
                 style={{
                   backgroundColor: c.student.year_group_colour + "20",
                   border: `1px solid ${c.student.year_group_colour}40`,
