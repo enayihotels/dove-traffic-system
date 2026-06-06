@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bell, CheckCircle, AlertTriangle, Search, Users, Loader2, MapPin, Phone } from "lucide-react";
+import { Bell, CheckCircle, AlertTriangle, Search, Users, Loader2, MapPin } from "lucide-react";
 import api from "../api/client";
 import type { PickupRequest, PickupSession } from "../types";
 import { useWS } from "../hooks/useWS";
