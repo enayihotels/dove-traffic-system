@@ -207,7 +207,7 @@ export default function MyStatus() {
       <div className="card text-center">
         <p className="label mb-4">Gate Verification QR Code</p>
         <div className="bg-white rounded-2xl p-4 inline-block">
-          <QRCode value={req.id} size={152}/>
+          <QRCode value={`https://doveland-frontend.onrender.com/verify/${req.id}`} size={152}/>
         </div>
         <p className="muted text-xs mt-3">Show this to gate staff for instant verification</p>
       </div>
