@@ -25,7 +25,9 @@ export default function Sessions() {
       api.get("/pickups/sessions/?status=all").then((r) =>
         Array.isArray(r.data) ? r.data : r.data.results ?? []
       ),
-    refetchInterval: 20_000,
+    refetchInterval: 60_000,
+    retry: 1,
+    retryDelay: 3000,
   });
 
   const inv = () => {
