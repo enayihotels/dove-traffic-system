@@ -59,8 +59,13 @@ export default function QRVerify() {
     } catch (e: any) {
       if (e.response?.status === 404) {
         setError("Invalid QR code — no matching pickup request found.");
+      } else if (e.response?.status === 403) {
+        setError("Access denied — please make sure you are logged in as staff.");
+      } else if (!e.response) {
+        setError("Server is starting up — please wait 30 seconds and try again.");
       } else {
-        setError("Could not verify. Please try again.");
+        const detail = e.response?.data?.error || e.response?.data?.detail || "";
+        setError(`Verification failed. ${detail || "Please try again."}`);
       }
     } finally {
       setBusy(false);
