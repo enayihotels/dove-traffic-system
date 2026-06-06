@@ -192,7 +192,7 @@ export default function AdminPanel() {
                   <input
                     type={showPass ? "text" : "password"}
                     className={inp + " pr-12"}
-                    placeholder="Min. 8 characters — parent will change this on first login"
+                    placeholder="Min. 8 characters  -  parent will change this on first login"
                     value={pForm.temp_password}
                     onChange={e => setPForm(p => ({ ...p, temp_password: e.target.value }))}
                   />
@@ -212,7 +212,7 @@ export default function AdminPanel() {
               <p className="text-blue-300 text-xs">
                 The parent will use this email and temporary password to log in.
                 They can change their password from the <strong>Change Password</strong> menu after logging in.
-                Share these details securely — do not send passwords by WhatsApp or SMS.
+                Share these details securely  -  do not send passwords by WhatsApp or SMS.
               </p>
             </div>
 
@@ -269,7 +269,7 @@ export default function AdminPanel() {
                           </div>
                           <div>
                             <p className="text-white text-sm font-medium">{p.full_name}</p>
-                            <p className="text-white/40 text-xs">{p.email} {p.phone ? `· ${p.phone}` : ""}</p>
+                            <p className="text-white/40 text-xs">{p.email} {p.phone ? ` .  ${p.phone}` : ""}</p>
                           </div>
                         </div>
                         <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${
@@ -287,14 +287,14 @@ export default function AdminPanel() {
                               className="inline-flex items-center gap-1 bg-blue-500/10 border border-blue-500/20
                                          text-blue-300 text-xs px-2.5 py-1 rounded-full">
                               {cl.student_name}
-                              <span className="text-blue-400/60">· {cl.relationship}</span>
+                              <span className="text-blue-400/60"> .  {cl.relationship}</span>
                             </span>
                           ))}
                         </div>
                       )}
                       {childLinks.length === 0 && (
                         <p className="text-amber-400/70 text-xs mt-1.5 pl-12">
-                          ⚠ No children linked yet — go to "Link Child to Parent" tab
+                          ! No children linked yet  -  go to "Link Child to Parent" tab
                         </p>
                       )}
                     </div>
@@ -325,7 +325,7 @@ export default function AdminPanel() {
                     value={lForm.user}
                     onChange={e => setLForm(p => ({ ...p, user: e.target.value }))}
                   >
-                    <option value="" className="bg-[#101827]">— Choose parent —</option>
+                    <option value="" className="bg-[#101827]"> -  Choose parent  - </option>
                     {parents.map(p => (
                       <option key={p.id} value={p.id} className="bg-[#101827]">
                         {p.full_name} ({p.email})
@@ -345,10 +345,10 @@ export default function AdminPanel() {
                     value={lForm.student}
                     onChange={e => setLForm(p => ({ ...p, student: e.target.value }))}
                   >
-                    <option value="" className="bg-[#101827]">— Choose student —</option>
+                    <option value="" className="bg-[#101827]"> -  Choose student  - </option>
                     {students.map(s => (
                       <option key={s.id} value={s.id} className="bg-[#101827]">
-                        {s.full_name} — {s.class_name}
+                        {s.full_name}  -  {s.class_name}
                       </option>
                     ))}
                   </select>
@@ -414,12 +414,12 @@ export default function AdminPanel() {
 
           {/* All links table */}
           <div className="bg-[#101827]/95 border border-white/10 rounded-2xl p-5 space-y-4">
-            <h2 className="text-white font-semibold text-base">All Parent–Child Links</h2>
+            <h2 className="text-white font-semibold text-base">All Parent-Child Links</h2>
 
             {cLoad ? (
               <div className="flex justify-center py-8"><Loader2 size={22} className="animate-spin text-emerald-400" /></div>
             ) : collectors.length === 0 ? (
-              <p className="text-white/30 text-sm text-center py-8">No links yet — create one above</p>
+              <p className="text-white/30 text-sm text-center py-8">No links yet  -  create one above</p>
             ) : (
               <div className="space-y-2">
                 {collectors.map(c => (
@@ -428,7 +428,7 @@ export default function AdminPanel() {
                     <div className="flex-1 min-w-0">
                       <p className="text-white text-sm font-medium">
                         {c.collector_name}
-                        <span className="text-white/30 mx-2">→</span>
+                        <span className="text-white/30 mx-2">-></span>
                         {c.student_name}
                       </p>
                       <div className="flex items-center gap-2 mt-1 flex-wrap">
