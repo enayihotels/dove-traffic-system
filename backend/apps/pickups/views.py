@@ -189,3 +189,40 @@ class EventListView(generics.ListAPIView):
         if session:
             return QueueEvent.objects.filter(session_id=session)
         return QueueEvent.objects.none()
+
+@api_view(["GET"])
+@permission_classes([IsStaff])
+def verify_qr(request, pk):
+    """Gate staff scans parent QR code — returns pickup details for verification."""
+    try:
+        req_obj = PickupRequest.objects.select_related(
+            "collector", "session"
+        ).prefetch_related(
+            "children__student__school_class__year_group"
+        ).get(pk=pk)
+    except PickupRequest.DoesNotExist:
+        return Response({"error": "Invalid QR code"}, status=404)
+
+    children = []
+    for c in req_obj.children.all():
+        children.append({
+            "name":       c.student.full_name,
+            "year_group": c.student.school_class.year_group.display_name,
+            "class_name": c.student.school_class.name,
+            "colour":     c.student.school_class.year_group.colour,
+            "is_ready":   c.is_ready,
+        })
+
+    return Response({
+        "id":             str(req_obj.id),
+        "queue_token":    req_obj.queue_token,
+        "status":         req_obj.status,
+        "collector_name": req_obj.collector.full_name,
+        "collector_phone": getattr(req_obj.collector, "phone", ""),
+        "session_type":   req_obj.session.get_session_type_display(),
+        "session_date":   str(req_obj.session.date),
+        "children":       children,
+        "checked_in_at":  str(req_obj.checked_in_at) if req_obj.checked_in_at else None,
+        "ai_flagged":     req_obj.ai_flagged,
+        "ai_risk_level":  req_obj.ai_risk_level,
+    })
