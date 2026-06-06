@@ -107,7 +107,7 @@ export default function Checkin() {
                     <p className="text-white font-medium text-sm">{s.full_name}</p>
                     <div className="flex items-center gap-1.5 mt-0.5">
                       <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{backgroundColor:s.year_group_colour}}/>
-                      <p className="muted text-xs truncate">{s.year_group_name} · {s.class_name}</p>
+                      <p className="muted text-xs truncate">{s.year_group_name}  .  {s.class_name}</p>
                     </div>
                   </div>
                   <AnimatePresence mode="wait">
