@@ -42,7 +42,9 @@ export default function Dashboard() {
       api.get("/pickups/sessions/").then((r) =>
         Array.isArray(r.data) ? r.data : r.data.results ?? []
       ),
-    refetchInterval: 15_000,
+    refetchInterval: 45_000,
+    retry: 1,
+    retryDelay: 3000,
   });
 
   const inv = () => qc.invalidateQueries({ queryKey: ["sessions"] });
