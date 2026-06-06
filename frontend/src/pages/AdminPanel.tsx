@@ -428,7 +428,7 @@ export default function AdminPanel() {
                     <div className="flex-1 min-w-0">
                       <p className="text-white text-sm font-medium">
                         {c.collector_name}
-                        <span className="text-white/30 mx-2">-></span>
+                        <span className="text-white/30 mx-2">{String.fromCharCode(8594)}</span>
                         {c.student_name}
                       </p>
                       <div className="flex items-center gap-2 mt-1 flex-wrap">
