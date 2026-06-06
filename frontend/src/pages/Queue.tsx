@@ -24,7 +24,9 @@ export default function Queue() {
   const { data: requests = [], isLoading } = useQuery<PickupRequest[]>({
     queryKey: ["queue", id],
     queryFn: () => api.get(`/pickups/requests/?session=${id}`).then(r => Array.isArray(r.data) ? r.data : (r.data.results ?? [])),
-    refetchInterval: 12_000, enabled: !!id,
+    refetchInterval: 20_000,
+    retry: 1,
+    retryDelay: 3000, enabled: !!id,
   });
 
   const onMsg = useCallback((msg: unknown) => {
