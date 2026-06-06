@@ -61,13 +61,13 @@ export default function Queue() {
   }, [qc, id]);
   useWS(`${WS}/ws/queue/${id}/`, onMsg, !!id);
 
-  // Call parent — sends notification
+  // Call parent  -  sends notification
   const callMut = useMutation({
     mutationFn: (rid: string) => api.post(`/pickups/requests/${rid}/call/`),
     onSuccess: (_, rid) => {
       qc.invalidateQueries({ queryKey: ["queue", id] });
       const r = requests.find(x => x.id === rid);
-      toast.success(`📢 Called: ${r?.collector_name} — ${r?.queue_token}`);
+      toast.success(`📢 Called: ${r?.collector_name}  -  ${r?.queue_token}`);
     },
     onError: () => toast.error("Failed to call. Try again."),
   });
@@ -123,7 +123,7 @@ export default function Queue() {
               <><span className="live-dot"/><span className="text-jade text-sm ml-1">Live</span></>
             )}
             <span className="muted text-sm">
-              {session?.scheduled_start}–{session?.scheduled_end}
+              {session?.scheduled_start}-{session?.scheduled_end}
             </span>
           </div>
         </div>
@@ -230,7 +230,7 @@ export default function Queue() {
                     <p className="font-mono font-bold text-2xl text-jade leading-none">
                       {req.queue_token}
                     </p>
-                    <p className="muted text-xs mt-1">#{req.queue_position ?? "–"}</p>
+                    <p className="muted text-xs mt-1">#{req.queue_position ?? "-"}</p>
                   </div>
 
                   {/* Details */}
@@ -263,7 +263,7 @@ export default function Queue() {
 
                   {/* Action buttons */}
                   <div className="flex flex-col gap-2 shrink-0">
-                    {/* CALL button — for pending/en_route/arrived/in_queue */}
+                    {/* CALL button  -  for pending/en_route/arrived/in_queue */}
                     {["pending","en_route","arrived","in_queue"].includes(req.status) && (
                       <button
                         onClick={() => callMut.mutate(req.id)}
@@ -275,7 +275,7 @@ export default function Queue() {
                         📢 Call
                       </button>
                     )}
-                    {/* DONE button — for called */}
+                    {/* DONE button  -  for called */}
                     {req.status === "called" && (
                       <button
                         onClick={() => doneMut.mutate(req.id)}
