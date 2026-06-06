@@ -1,4 +1,5 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { QrCode, CheckCircle, AlertTriangle, Loader2, User, X, ShieldCheck } from "lucide-react";
 import api from "../api/client";
@@ -35,11 +36,17 @@ const STATUS_LABEL: Record<string, string> = {
 const STATUS_OK = ["pending","en_route","arrived","in_queue","called"];
 
 export default function QRVerify() {
+  const { id: urlId }       = useParams<{ id?: string }>();
   const [input, setInput]   = useState("");
   const [result, setResult] = useState<VerifyResult | null>(null);
   const [error,  setError]  = useState("");
   const [busy,   setBusy]   = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Auto-verify if UUID comes from scanned QR URL
+  useEffect(() => {
+    if (urlId) verify(urlId);
+  }, [urlId]);
 
   const verify = async (id: string) => {
     const clean = id.trim();
