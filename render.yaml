@@ -127,9 +127,9 @@ services:
         destination: /index.html       # SPA fallback so React Router works
     envVars:
       - key: VITE_API_URL
-        sync: false                    # set after backend deploys: https://doveland-backend.onrender.com/api
+        value: https://doveland-backend.onrender.com/api
       - key: VITE_WS_URL
-        sync: false                    # set after backend deploys: wss://doveland-backend.onrender.com
+        value: wss://doveland-backend.onrender.com
       - key: VITE_SCHOOL_LAT
         value: "8.97227713255338"
       - key: VITE_SCHOOL_LNG
