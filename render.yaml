@@ -139,6 +139,12 @@ services:
       - key: VITE_GEOFENCE
         value: "300"
     headers:
+      - path: /index.html
+        name: Cache-Control
+        value: no-cache, no-store, must-revalidate
+      - path: /
+        name: Cache-Control
+        value: no-cache, no-store, must-revalidate
       - path: /*
         name: X-Frame-Options
         value: DENY
