@@ -9,6 +9,7 @@ import Students       from "./pages/Students";
 import AIAssistant    from "./pages/AIAssistant";
 import Checkin        from "./pages/Checkin";
 import MyStatus       from "./pages/MyStatus";
+import QRVerify      from "./pages/QRVerify";
 import ChangePassword from "./pages/ChangePassword";
 import AdminPanel     from "./pages/AdminPanel";
 
