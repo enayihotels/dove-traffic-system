@@ -20,7 +20,9 @@ export default function MyStatus() {
   const { data:requests=[], isLoading } = useQuery<PickupRequest[]>({
     queryKey:["my-requests"],
     queryFn: () => api.get("/pickups/requests/").then(r=>Array.isArray(r.data)?r.data:(r.data.results??[])),
-    refetchInterval:10_000,
+    refetchInterval: 30_000,
+    retry: 1,
+    retryDelay: 3000,
   });
 
   const req  = requests.find(r=>!["collected","cancelled","no_show"].includes(r.status));
