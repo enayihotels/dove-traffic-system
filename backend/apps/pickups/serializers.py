@@ -17,13 +17,13 @@ class PickupSessionSerializer(serializers.ModelSerializer):
         ]
 
     def get_active_count(self, obj):
-        return obj.requests.filter(status__in=["arrived", "in_queue", "called"]).count()
+        return obj.requests.filter(status__in=["pending", "en_route", "arrived", "in_queue", "called"]).count()
 
     def get_collected_count(self, obj):
         return obj.requests.filter(status="collected").count()
 
     def get_pending_count(self, obj):
-        return obj.requests.filter(status__in=["pending", "en_route"]).count()
+        return obj.requests.exclude(status__in=["collected", "no_show"]).count()
 
 
 class PickupChildSerializer(serializers.ModelSerializer):
