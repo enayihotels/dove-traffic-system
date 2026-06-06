@@ -52,7 +52,7 @@ export default function Layout() {
   const { data: notifs = [] } = useQuery<AppNotification[]>({
     queryKey: ["notifs"],
     queryFn: () =>
-      api.get("/api/alerts/").then((r) =>
+      api.get("/alerts/").then((r) =>
         Array.isArray(r.data) ? r.data : r.data.results ?? []
       ),
     refetchInterval: 30_000,
